@@ -204,7 +204,7 @@ def index():
 
 @app.route("/blog") #All-Blog
 def list_blogs():
-    blog = Blog.query.all()
+    blog = Blog.query.order_by(Blog.id.desc()).all()
     username = 'All'
     return render_template('blog.html', username=username, blog=blog)
 
@@ -212,7 +212,7 @@ def list_blogs():
 @app.route("/my_blog")
 def blog():
     owner = User.query.filter_by(username=session['username']).first()
-    blog = Blog.query.filter_by(owner=owner).all()
+    blog = Blog.query.filter_by(owner=owner).order_by(Blog.id.desc()).all()
     username = owner.username
     return render_template('blog.html', blog=blog, username=username)
 
@@ -222,7 +222,7 @@ def blog():
 def user_blog(): 
     id = request.args['id']
     owner = User.query.filter_by(id=id).first()
-    blog = Blog.query.filter_by(owner_id=owner.id).all()
+    blog = Blog.query.filter_by(owner_id=owner.id).order_by(Blog.id.desc()).all()
     print(id)
     #return render_template('test.html', x=username)
     return render_template('blog.html', blog=blog, username= owner.username)
